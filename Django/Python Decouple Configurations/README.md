@@ -35,10 +35,10 @@ from decouple import Csv
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 EMAIL_HOST = config('EMAIL_HOST', default='localhost')
 EMAIL_PORT = config('EMAIL_PORT', default=25, cast=int)
 
-DEBUG = config('DEBUG', default=False, cast=bool)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
