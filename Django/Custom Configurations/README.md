@@ -18,6 +18,22 @@ STATICFILES_DIRS=[
     
 
 ```
+
+## Template configs
+
+
+-   Update `project/settings.py`
+
+
+```
+
+'DIRS': [
+            BASE_DIR / 'master_app/templates/master_app',
+        ],
+
+```
+
+
 ## Media Configs
 
 
@@ -64,12 +80,3 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = "XXXX"  
 
 ```
-## Template configs
-
-
--   Update `project/settings.py`
-
-
-```
-
-BASE_DIR / 'master_app/templates/master_app',
