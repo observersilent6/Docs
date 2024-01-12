@@ -8,3 +8,9 @@ from django.contrib.auth import authenticate, login, logout
 def UserLogoutView(request):
     logout(request)
     return redirect('master-home')
+
+
+
+
+####    app/urls.py
+path('logout', views.UserLogoutView, name="user_logout"),
