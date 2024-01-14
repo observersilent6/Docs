@@ -1,5 +1,9 @@
 #   Django - Web Sockets
 
+Ref : https://freedium.cfd/https://medium.com/geekculture/a-beginners-guide-to-websockets-in-django-e45e68c68a71
+
+Ref : https://channels.readthedocs.io/en/stable/installation.html
+
     pip install channels channels["daphne"]
 
 
