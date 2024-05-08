@@ -16,3 +16,9 @@ https://medium.com/@midejoseph24/deploying-mysql-on-kubernetes-16758a42a746
 
 
     https://www.digitalocean.com/community/tutorials/how-to-deploy-postgres-to-kubernetes-cluster
+
+
+
+**Deploy Apache on Kubernetes**
+
+    https://shubhamksawant.medium.com/deploy-apache-web-server-on-kubernetes-cluster-0552638ca171
