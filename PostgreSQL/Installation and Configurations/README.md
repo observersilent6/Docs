@@ -37,15 +37,15 @@ Ref : https://www.cherryservers.com/blog/how-to-install-and-setup-postgresql-ser
 
 -   Create New Database :
     
-        CREATE DATABASE users;
+        CREATE DATABASE test_db;
 
 -   Grant Privileges to User on a specific Database:
 
-        GRANT ALL PRIVILEGES ON DATABASE dev_db TO jhon;
+        GRANT ALL PRIVILEGES ON DATABASE test_db TO jhon;
 
 -   Change Ownership for a Databse:
     
-        ALTER DATABASE dev_db OWNER TO jhon;
+        ALTER DATABASE test_db OWNER TO jhon;
 
 
 -   Create A New Table to a Database:
