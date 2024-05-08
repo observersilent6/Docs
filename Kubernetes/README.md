@@ -9,3 +9,10 @@
 **Deploy MYSQL on kubernets**
 
 https://medium.com/@midejoseph24/deploying-mysql-on-kubernetes-16758a42a746
+
+
+
+**Deploy Postgresql on kubernetes**
+
+
+    https://www.digitalocean.com/community/tutorials/how-to-deploy-postgres-to-kubernetes-cluster
