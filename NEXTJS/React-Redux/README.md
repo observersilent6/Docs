@@ -291,6 +291,71 @@ export const config = { matcher: ["/", "/login", "/register", "/password/reset",
 ```
 
 
+
+-   Logout functionality
+
+
+```
+import { logout } from '@/app/GlobalRedux/slices/authSlice';
+
+
+// import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const dispatch = useDispatch();
+
+
+        const handleLogout = async () => {
+      // const cookies = new Cookies();
+      // cookies.remove("token")
+
+      // Logout-API call to the backend-server
+      // logout()
+      axios({
+        method: "GET",
+        url: `${API_SERVER_URLS.LOGOUT}`,
+        // data: bodyFormData,
+        headers: { 
+          "Content-Type": "application/json" ,
+          "Access-Control-Allow-Origin" : process.env.ACCESS_CONTROL_ALLOW_ORIGIN
+        },
+        withCredentials: true
+      }).then((res) => {
+          if(res?.status === 200){
+            dispatch(logout());
+                router.push("/login");
+                router.refresh();
+            // toast.success('Successfully user logout.')
+              // setTimeout(() => {
+              //   dispatch(logout());
+              //   router.push("/login");
+              //   router.refresh();
+              // }, 1000);
+            
+          }
+      } ).catch((err) => {
+        if(err?.response?.statusText === "Unauthorized"){
+          toast.success('Successfully user logout.')
+          setTimeout(() => {
+            dispatch(logout());
+            router.push("/login");
+            router.refresh();
+          }, 1000);
+          // toast.error(`Incorrect email or password.`)
+        } else{
+          toast.error(`Whoops! Something went wrong.`)
+          console.log(err);
+        }
+        
+      })
+    };
+
+
+<button onClick={handleLogout} className="bg-color-green text-indigo inline-block text-lg py-3 px-6  border-0 text-center cursor-pointer ring-0 transition-all rounded-sm font-medium mr-2">{"Logout"}</button>
+
+```
+
+
 -   Verify Everything is integrated successfully (Create a sperate page and test following code)
 
 
