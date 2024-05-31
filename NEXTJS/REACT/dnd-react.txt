@@ -1,0 +1,463 @@
+-   Proviers `/app/proviers/DndProvider/DndProvider.tsx`
+
+
+"use client"
+
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import React, { ReactNode } from "react";
+interface Props{
+    children : ReactNode
+}
+const DnDProvider = ({ children } : Props) =>{
+    return <DndProvider backend={HTML5Backend} >{children}</DndProvider >
+}
+export default DnDProvider;
+
+
+-   Update Layout
+
+import DnDProvider from './providers/DnDProvider/DnDProvider';
+
+
+<DnDProvider >
+<main className="relative z-10 flex flex-1 flex-col">
+    <Header />
+    {children}
+</main>
+</DnDProvider>
+
+
+
+-   DragJs Compoment
+
+"use client"
+
+import { DragCard } from "@/app/components/DragCard/DragCard";
+
+import {  docker_images } from "@/app/lib/utils"
+
+import {  useEffect, useState } from "react";
+import axios from 'axios';
+import { API_SERVER_URLS } from "@/app/lib/urlpatterns"
+
+  export function DragFile() {
+
+
+    const [scenario, setScenario] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    const [components, setComponents] = useState([]);
+
+    const DataFetch = async () => {
+      axios({
+          method: "GET",
+          url: `${API_SERVER_URLS.LIST_DOCKERS}`,
+          headers: { 
+              "Content-Type": "application/json" ,
+              "Access-Control-Allow-Origin" : process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+              // "Authorization" : `Bearer ${token}`
+          },
+          withCredentials: true
+      }).then((res) => {
+          setComponents(res?.data)
+          // console.debug(res)
+      }).catch((err) => {
+          console.error(err)
+      }).finally(() => {
+          setLoading(false)
+      })
+  }
+
+
+    useEffect(() => {
+      DataFetch()
+    }, [])
+
+    return (
+      <>
+        {components.map((e, index) => (
+            <div
+              key={e.name + e.id}
+              className="my-2 p-2 rounded  text-white font-bold cursor-pointer"
+            >
+              <DragCard draggable name={e.name} logo={e.icon_path} id={e.id} top={100} left={100} />
+            </div>
+          ))}
+      </>
+    );
+  }
+  export default DragFile;
+
+
+
+
+- DragCard components
+
+"use client";
+
+import { useDrag } from "react-dnd";
+
+
+import Image from 'next/image'
+
+export const DragCard = ({ name , logo, id, top, left}) => {
+  const [{ isDragging }, dragRef] = useDrag({
+    type: "language",
+    item: { name, logo , id, top, left},
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  return (
+    <div ref={dragRef} id={id}  style={{ left: `${left}px`,
+    top: `${top}px`}} >
+      <Image src={logo} alt={name} 
+        width={0}
+        height={0}
+        sizes="18vw"
+        style={{ width: '50px', height: 'auto' }}  
+      />
+      {isDragging && ""}
+    </div>
+  );
+};
+
+
+
+- Integrate it with a page
+
+
+"use client"
+
+import AOS from 'aos';
+import {  useEffect, useState } from "react";
+import axios from 'axios';
+import { API_SERVER_URLS } from "@/app/lib/urlpatterns"
+import { useAuth } from "@/app/hooks/useAuth";
+// import Script from 'next/script'
+import { useParams } from 'next/navigation'
+import { Content }  from "antd"
+import Image from 'next/image'
+// import { scenario_categories, docker_images, sleep } from "@/app/lib/utils"
+import DragFile from "@/app/components/DragFile/DragFile.jsx";
+import { useDrop } from "react-dnd";
+import toast from 'react-hot-toast';
+import CustomToaster from "@/app/components/CustomToaster/CustomToaster"
+const styles = { 
+    minHeight : "calc(75vh)", 
+    height :"calc(75vh)" , 
+    maxHeight: "calc(75vh)"
+}
+
+// function extractNames(data) {
+//     const names = [];
+//     data.forEach(item => {
+//         names.push(item.name);
+//     });
+//     return names;
+// }
+
+
+const SaveScenario = ({scenario, scenario_id, dockers}) =>{
+    const updateData = async  () => {
+        await axios
+        .patch(`${API_SERVER_URLS.UPDATE_SCENARIO}/${scenario_id}`, {
+            name: scenario?.name,
+            images: dockers.map(item => item.id).join(", ")
+        })
+        .then((response) => {
+            toast.success("Successfully updated scenario");
+        })
+        .catch((err) => {
+            toast.error("Something went wrong");
+            console.debug(err);
+        });
+    }
+
+    const clickHandler = () => updateData();
+
+    return (
+        <>
+            {
+                scenario?.is_deploy ? null : <button  onClick={clickHandler} className="bg-color-green text-indigo inline-block text-lg py-3 px-6  border-0 text-center cursor-pointer ring-0 transition-all rounded-none font-medium mr-2 w-100 w-full">{"Save"}</button>
+            }
+        </>
+        
+    )
+}
+
+
+const DeployScenarioBtn = ({scenario, scenario_id, dockers}) =>{
+    const deployScenario = async  () => {
+        await axios
+        .patch(`${API_SERVER_URLS.DEPLOY_SCENARIO}/${scenario_id}/deploy`, {
+            is_deploy  : true,
+        })
+        .then((response) => {
+            toast.success("Successfully deploy scenario");
+        })
+        .catch((err) => {
+            toast.error("Something went wrong");
+            console.debug(err);
+        });
+    }
+
+    const clickHandler = () => deployScenario();
+
+    return (
+        <>
+            {
+                scenario?.is_deploy ? null : dockers?.length ?  
+                <button  onClick={clickHandler} className="bg-red-900 text-white inline-block text-lg py-3 px-6  border-0 text-center cursor-pointer ring-0 transition-all rounded-none font-medium mr-2 w-100 w-full"  >{"Deploy Scenario"}</button> : 
+                <button  onClick={clickHandler} className="bg-gray-500 text-black inline-block text-lg py-3 px-6  border-0 text-center cursor-pointer ring-0 transition-all rounded-none font-medium mr-2 w-100 w-full"  >{"Deploy Scenario"}</button>
+
+            }
+        </>
+    )
+}
+
+
+
+
+
+export default function Page(){
+    const auth =  useAuth();
+
+    // mouse cursor coordinates
+    // const mousePosition = useMousePosition();
+
+
+    const [scenario, setScenario] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    // const [elements, setElements] = useState([]);
+
+
+    const [basket, setBasket] = useState([]);
+    // const moveElement = (id, left, top) => {
+    //     const updatedElements = elements.map((element) => {
+    //       if (element.id === id) {
+    //         return { ...element, left, top };
+    //       }
+    //       return element;
+    //     });
+    //     setElements(updatedElements);
+    //   };
+
+
+    // const removeElement = (idToRemove) => {
+    //     const updatedElements = elements.filter(({ id }) => id !== idToRemove);
+    //     setElements(updatedElements);
+    // };
+    
+  const [{ isOver }, dropRef] = useDrop({
+    accept: "language",
+    drop: (item, monitor) => {
+        const delta = monitor.getDifferenceFromInitialOffset();
+        // console.debug(delta)
+        // console.debug(monitor.getItem().left, monitor.getItem().top)
+        // console.debug(monitor.getItem())
+        // console.debug(mousePosition)
+        const left = Math.round(  Math.abs(delta.x + (monitor.getItem().left)));
+        const top = Math.round(  Math.abs(delta.y + (monitor.getItem().top)));
+        // const left = mousePosition.x;
+        // const top = mousePosition.y;
+        item.data = {
+            ...item,
+            left: left,
+            top: top,
+            data_id: basket.length
+        }
+        // console.debug(item?.data?.left, item?.data?.left)
+        
+        setBasket((basket) =>
+            !basket.includes(item) ? [...basket, item] : basket
+        )
+
+        // console.debug(`[data-id="${item?.data?.data_id}"]`)
+        
+
+        // console.debug(draggedElement)
+
+        // const element = document.getElementById(item.id);
+        
+        // 
+        // 
+        // // moveElement(item.id, left, top);
+        // console.debug(left, top, item)
+        // const delta = monitor.getDifferenceFromInitialOffset();
+        // console.debug(delta)
+        // console.debug(item?.id)
+        // const element = document.getElementById(item.id);
+        // console.debug(element)
+        // const x = delta.x - element.offsetLeft;
+        // const y = delta.y - element.offsetTop;
+        // const left = Math.round(element.offsetLeft + delta.x);
+        // const top = Math.round(element.offsetTop + delta.y);
+        // element.style.left = `${left}px`;
+        // element.style.top = `${top}px`;
+        // console.debug(left, top, element)
+        // get element by attribute data-id
+        // console.debug(item.name+item.id)
+        // console.debug(`[data-id="${item.name+item.id}"]`);
+        
+        // console.debug(draggedElement)
+    }
+        ,
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  });
+    const params = useParams()
+    // const router = useRouter()
+    // const { ID } = router.query
+    // useEffect(() => {
+    //     AOS.init();
+    // }, [])
+
+    const DataFetch = () => {
+        axios({
+            method: "GET",
+            url: `${API_SERVER_URLS.GET_SCENARIO}/${params?.ID}`,
+            headers: { 
+                "Content-Type": "application/json" ,
+                "Access-Control-Allow-Origin" : process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+                // "Authorization" : `Bearer ${token}`
+            },
+            withCredentials: true
+        }).then((res) => {
+            setScenario(res?.data)
+            // console.debug(res?.data)
+            // for(let index = 0; index < res?.data?.images?.length; index++){
+            //     const element = res?.data?.images[index];
+            //     const item = {
+            //         name: element.name,
+            //         logo: element.icon_path,
+            //         id: element.id,
+            //         top: 100,
+            //         left: 100,
+            //         data_id: basket.length
+            //     }
+            //     console.debug(item)
+            //     // setBasket((basket) =>
+            //     //     !basket.includes(item) ? [...basket, item] : basket
+            //     // )
+            // }
+            // console.debug(res)
+        }).catch((err) => {
+            console.error(err)
+        }).finally(() => {
+            setLoading(false)
+        })
+    }
+    
+    
+    useEffect(() => {
+        AOS.init();
+        DataFetch();
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+
+    return (
+        <>
+        {/* <Script id="show-banner" onLoad={() => {
+          console.log('Script has loaded')
+        }}>
+                
+                {`document.getElementsByTagName('body')[0].classList.add('overflow-y-hidden')`}
+            </Script> */}
+            <CustomToaster />   
+            <div className=" pt-0 px-0 pb-0 grid  auto-rows-fr grid-cols-9">
+                <div className="w-full col-span-9">
+                {/* <p>
+                    Your cursor position:
+                    <br />
+                    {JSON.stringify(mousePosition)}
+                </p> */}
+                    {/* {params?.ID} */}
+                    {/* <CreateScenarioForm /> */}
+                    <section >
+                        <div className={"container mx-auto  " }>
+                            <div className="w-full mt-0 mr-0 mb-0 ml-0 relative z-10  " >
+                                <div className="flex flex-col items-start justify-start pt-10 lg-pt-0 px-0 pb-0 bg-transparent  rounded-xl relative z-10">
+                                {/* <p className="w-full text-2xl xl-text-3xl font-bold text-left leading-snug  text-blue-gray mt-0 ml-0 mr-0 mb-1" data-aos="fade-left" data-aos-duration="600">{scenario && scenario?.name}</p> */}
+                                    <div className="w-full mt-0 mr-0 mb-0 ml-0 relative ">
+                                        <div className='flex my-0'>
+                                            <div className='w-2d12 bg-midnight-moss   rounded-none	' >
+                                                <p className="text-white text-md font-medium border border-blue-gray border-solid border-l-0 border-r-0 border-t-0 px-2 pb-2 text-center mb-0">Components</p>
+                                                {/* <OSTabs /> */}
+                                                <div className=' overflow-y-auto ' style={styles}  id="components" >
+                                                    <div className='flex flex-row flex-wrap'>
+
+                                                    <DragFile />
+                                                    {/* <DragFile />
+                                                    <DragFile />
+                                                    <DragFile />
+                                                    <DragFile />
+                                                    <DragFile />
+                                                    <DragFile />
+                                                    <DragFile /> */}
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div>
+                                                    <SaveScenario scenario_id={params?.ID} scenario={scenario} dockers={basket} />
+                                                </div>
+                                            </div>
+                                            <div className='w-8d12  rounded-lg 	rounded-l-none rounded-r-none   px-20  py-0'   style={styles} >
+                                            <div className="m-0 rounded-none  w-fit h-full drag-container" ref={dropRef} >
+                                                <div className="my-4 flex flex-row flex-wrap">
+                                                    {basket.map((e, index) => (
+                                                        <div className=" my-2 p-2 rounded  text-white font-bold cursor-pointer absolute" key={e.name+index} data-id={index} style={{left : `${e.data.left}px`, top : `${e.data.top}px`}} >
+                                                            <Image src={e.logo} alt={e.name} 
+                                                            width={0}
+                                                            height={0}
+                                                            sizes="20vw"
+                                                            style={{ width: '50%', height: 'auto' }}   />
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                            </div>
+                                            <div className='w-2d12 bg-midnight-moss   rounded-none	' >
+                                                <p className="text-white text-md font-medium border border-blue-gray border-solid border-l-0 border-r-0 border-t-0 px-2 pb-2 text-center mb-0">{"Properties"}</p>
+                                                {/* <OSTabs /> */}
+                                                <div className=' overflow-y-auto ' style={styles}  id="components" >
+                                                    <div className='flex flex-row flex-wrap'>
+
+                                                    {/* <DragFile /> */}
+                                                    {/* <DragFile />
+                                                    <DragFile />
+                                                    <DragFile />
+                                                    <DragFile />
+                                                    <DragFile />
+                                                    <DragFile />
+                                                    <DragFile /> */}
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div>
+                                                <DeployScenarioBtn scenario_id={params?.ID} scenario={scenario} dockers={basket} />
+                                                </div>
+                                            </div>
+                                            
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            
+            
+        </>
+    )
+}
+
+

@@ -7,3 +7,6 @@ https://www.hostinger.com/tutorials/how-to-install-node-ubuntu
 ## Deployment 
 
 https://www.howtoforge.com/how-to-install-reactjs-on-ubuntu-22-04/
+
+
+https://episyche.com/blog/user-guide-for-deploying-the-nextjs-app-in-production-using-pm2-and-nginx

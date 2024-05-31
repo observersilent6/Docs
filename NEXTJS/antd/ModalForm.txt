@@ -1,0 +1,116 @@
+"use client"
+
+import { Modal, Button, Tooltip } from "antd" ;
+import { FaPlus } from "react-icons/fa";
+import scenario_styles from "./styles.module.css"
+import { useState, useRef } from "react";
+import { MdOutlineCancel } from "react-icons/md";
+import { IoCreateOutline } from "react-icons/io5";
+import {TextInput} from "@/app/components/Inputs/Inputs";
+import URL_PATTERN, { SCENARIOS_ROUTES } from "@/app/lib/urlpatterns"
+import { useRouter } from 'next/navigation';
+import  { successToast, errorToast } from "@/app/components/CustomToaster/CustomToaster"
+import axios from 'axios';
+import { axiosRequest } from "@/app/lib/axiosRequest";
+
+export default function CreateScenarioForm() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const name = useRef("");
+    const router = useRouter();
+
+    const validateInput = () => {
+        return name.current.trim() === "" ? errorToast("Property Name is required") :  true
+    }
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+    const PostData = () => {
+        try{
+            axios(axiosRequest("POST",  SCENARIOS_ROUTES.ADD,"application/json",   {
+                name: name.current
+            })).then((res) => {
+                successToast(`Scenario ${name.current} created successfully!`)
+                setTimeout(() => {
+                    setIsModalOpen(false);
+                    router.push(`${URL_PATTERN?.SCENARIOS_LIST}`)
+                    router.refresh()
+                }, 1000)
+                
+            }).catch((err) => {
+                errorToast(`${err} : ${err}`)
+            })
+        } catch (err){
+            errorToast("Something went wrong! Please try again after sometime.")
+            console.debug(err)
+        }
+    }
+
+    const handleOk = async () => {
+        validateInput() ? PostData() : null;
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+    return (
+        <>
+        <Tooltip title="New Scenario" placement="left">
+            <Button  className={scenario_styles.scenario_btn} onClick={showModal}>
+                <FaPlus className=""/>
+            </Button>
+        </Tooltip>
+        <Modal 
+                title={<p className="">{"New Scenario"}</p>}  
+                className="modalStyle"
+                open={isModalOpen} 
+                onOk={handleOk} 
+                onCancel={handleCancel}
+                okText={  <p className="m-0 p-0 flex justify-center items-center text-lg  font-bold"><IoCreateOutline  className="mr-2"  /> Add  </p>   }
+                cancelText={<p className="m-0 p-0 flex justify-center items-center text-lg font-bold"><MdOutlineCancel  className="mr-2"  /> Cancel  </p>}
+            >
+                <div className="flex flex-col items-start justify-start pt-5 pl-0 pr-0 pb-10  bg-transparent  rounded-xl  z-10">
+                    <div className="m-0 relative space-y-5 w-full">
+                        <TextInput label={"Name"} ref={name} placeholder={"Sample Scenario - 1"} type={"text"}  />
+                    </div>
+                </div>
+            </Modal>
+        </>
+        
+    )
+}
+------------------------
+
+.scenario_btn{
+    background-color: transparent !important;
+    border: 1px var(--lime-green) solid !important;
+    color: var(--lime-green) !important;
+    font-size: 1.5rem !important;
+    line-height: 2rem !important;
+    padding: 0.75rem !important;
+    text-align: center;
+    cursor: pointer;
+    --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+    --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(0px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    border-radius: 9999px !important;
+    font-weight: 500 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 50;
+    position: fixed !important;
+    bottom: 15px !important;
+    right: 15px !important;
+    width: 4rem !important;	
+    height: 4rem !important;
+    box-shadow: 0 0 30px 3px var(--color-3);
+}
+
+.scenario_btn:hover{
+    background-color: var(--lime-green) !important;
+    color: var(--indigo) !important;
+}

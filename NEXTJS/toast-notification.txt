@@ -1,0 +1,30 @@
+import  toast, { Toaster } from 'react-hot-toast';
+
+export default function CustomToaster() {
+  const toastOptions={
+    style: {
+      background: '#363636',
+      color: '#fff',
+    },
+    success: {
+      iconTheme: {
+      primary: 'green',
+      secondary: 'white',
+    },
+    },
+  }
+  return <Toaster   toastOptions={toastOptions} />
+}
+
+
+const notifyToast = (msg) => toast(`${msg}`);
+const successToast = (msg) => toast.success(`${msg}`);
+const errorToast = (msg) => toast.error(`${msg}`);
+
+
+export {notifyToast, successToast, errorToast};
+
+-----------------------
+
+import  { successToast, errorToast } from "@/app/components/CustomToaster/CustomToaster"
+successToast(`Scenario ${name.current} created successfully!`)

@@ -1,0 +1,3 @@
+setProperty((prev) => {
+    return prev.map((item) => item.id === prop?.id ? {...item, name: name.current, is_active: is_active.current, required: is_required.current, purpose: purpose.current, value: default_value.current} : item)
+})

@@ -297,61 +297,121 @@ export const config = { matcher: ["/", "/login", "/register", "/password/reset",
 
 ```
 import { logout } from '@/app/GlobalRedux/slices/authSlice';
-
-
-// import { useDispatch } from 'react-redux';
-import { useSelector, useDispatch } from 'react-redux';
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const dispatch = useDispatch();
-
-
-        const handleLogout = async () => {
-      // const cookies = new Cookies();
-      // cookies.remove("token")
-
-      // Logout-API call to the backend-server
-      // logout()
+const handleLogout = async () => {
       axios({
         method: "GET",
-        url: `${API_SERVER_URLS.LOGOUT}`,
-        // data: bodyFormData,
+        url: `${USERS_ROUTES.LOGOUT}`,
         headers: { 
           "Content-Type": "application/json" ,
-          "Access-Control-Allow-Origin" : process.env.ACCESS_CONTROL_ALLOW_ORIGIN
+          "Access-Control-Allow-Origin" : process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+          "Authorization" : `Bearer ${token}`
         },
         withCredentials: true
       }).then((res) => {
           if(res?.status === 200){
             dispatch(logout());
-                router.push("/login");
-                router.refresh();
-            // toast.success('Successfully user logout.')
-              // setTimeout(() => {
-              //   dispatch(logout());
-              //   router.push("/login");
-              //   router.refresh();
-              // }, 1000);
-            
+                router.push(URL_PATTERN.LOGOUT);
+                router.refresh(); 
           }
       } ).catch((err) => {
         if(err?.response?.statusText === "Unauthorized"){
-          toast.success('Successfully user logout.')
-          setTimeout(() => {
-            dispatch(logout());
-            router.push("/login");
+          dispatch(logout());
+            router.push(URL_PATTERN.LOGOUT);
             router.refresh();
-          }, 1000);
-          // toast.error(`Incorrect email or password.`)
         } else{
           toast.error(`Whoops! Something went wrong.`)
           console.log(err);
         }
-        
       })
     };
-
-
 <button onClick={handleLogout} className="bg-color-green text-indigo inline-block text-lg py-3 px-6  border-0 text-center cursor-pointer ring-0 transition-all rounded-sm font-medium mr-2">{"Logout"}</button>
+
+```
+
+- Logout Page
+
+```
+"use client"
+
+
+import Image from 'next/image';
+
+import Link from "next/link"
+
+import { useAuth } from "@/app/hooks/useAuth";
+import { logout } from '@/app/GlobalRedux/slices/authSlice';
+import Cookies from "universal-cookie";
+// import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+
+import {useEffect} from 'react';
+
+import { USERS_ROUTES } from "@/app/lib/urlpatterns"
+
+
+import axios from 'axios';
+import CustomToaster, {notifyToast, errorToast, successToast} from "@/app/components/CustomToaster/CustomToaster"
+const LOGOUT_IMAGE = () => {
+    return (
+        <Image src="/assets/img/logout_2.gif" alt="me" width={500} height={500}  unoptimized={true} />
+    )
+}
+
+function Page() {
+
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const dispatch = useDispatch();
+    const cookies = new Cookies();
+    const token = cookies.get("token") ?? null;
+
+    const LogoutUser = (token) => {
+    if(isAuthenticated){
+        axios({
+            method: "GET",
+            url: `${USERS_ROUTES.LOGOUT}`,
+            headers: { 
+              "Content-Type": "application/json" ,
+              "Access-Control-Allow-Origin" : process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+              "Authorization" : `Bearer ${token}`
+            },
+            withCredentials: true
+          }).then((res) => {
+              if(res?.status === 200){
+                dispatch(logout());
+              }
+          } ).catch((err) => {
+            if(err?.response?.statusText === "Unauthorized"){
+                successToast('Successfully user logout.')
+                dispatch(logout());
+            } else{
+                errorToast(`Whoops! Something went wrong.`)
+                console.log(err);
+            }
+          })
+        }
+    }
+
+    useEffect(() => {
+        LogoutUser(token)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } , [])
+
+    return (
+        <section>
+            <CustomToaster />
+            <div className="container mx-auto">
+                <div className='flex flex-col justify-between items-center'>
+                    <LOGOUT_IMAGE />
+                    <Link  href={"/login"} className="bg-color-green text-indigo inline-block text-lg py-3 px-6  border-0 text-center cursor-pointer ring-0 transition-all rounded-sm font-medium mt-3">{"Back to Login"}</Link>
+                </div>
+            </div>
+        </section>
+    )
+}
+
+export default Page
+
 
 ```
 

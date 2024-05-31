@@ -1,0 +1,50 @@
+
+import Cookies from "universal-cookie";
+
+const axiosRequest = (method,target_url, content_type,  data) => {
+    const cookies = new Cookies();
+    const token = cookies.get("token") ?? null;
+    if(method === "POST" || method === "PUT"){
+        return {
+            method: `${method}`,
+            url: `${target_url}`,
+            data: data,
+            headers: { 
+                "Content-Type": `${content_type}` ,
+                "Access-Control-Allow-Origin" : process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+                "Authorization" : `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+    } else{
+        return {
+            method: `${method}`,
+            url: `${target_url}`,
+            headers: { 
+                "Content-Type": `${content_type}` ,
+                "Access-Control-Allow-Origin" : process.env.ACCESS_CONTROL_ALLOW_ORIGIN,
+                "Authorization" : `Bearer ${token}`
+            },
+            withCredentials: true
+        }
+    }
+    
+}
+
+export { axiosRequest }
+
+---------------------
+
+axios(axiosRequest("POST",  SCENARIOS_ROUTES.ADD,"application/json",   {
+                name: name.current
+            })).then((res) => {
+                successToast(`Scenario ${name.current} created successfully!`)
+                setTimeout(() => {
+                    setIsModalOpen(false);
+                    router.push(`${URL_PATTERN?.SCENARIOS_LIST}`)
+                    router.refresh()
+                }, 1000)
+                
+            }).catch((err) => {
+                errorToast(`${err} : ${err}`)
+            })

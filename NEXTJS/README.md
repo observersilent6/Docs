@@ -7,6 +7,12 @@ https://nextjs.org/docs/pages/building-your-application/optimizing/scripts
 
 https://stackoverflow.com/questions/71235874/how-to-allow-all-domains-for-image-nextjs-config
 
+**Role Based Access**
+
+https://medium.com/@chsherryy/implementing-role-based-access-control-in-next-js-next-auth-with-prisma-and-mongodb-324f1929cf93
+
+
+
 **Add Icon to the web app**
 
 
