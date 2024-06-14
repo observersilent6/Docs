@@ -1,0 +1,35 @@
+import NextTopLoader from 'nextjs-toploader';
+
+
+
+
+const Loader = ({color}) => {
+    return (
+        <NextTopLoader
+            color="#9fef00"
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={3}
+            crawl={true}
+            showSpinner={false}
+            easing="ease"
+            speed={200}
+            shadow="0 0 10px #9fef00,0 0 5px #9fef00"
+        />
+    )
+}
+
+export default Loader;
+
+
+
+-----------
+
+
+import theme from './theme/themeConfig';
+
+import Loader from '@/app/components/Common/Loader';
+
+<Loader color={theme.token ? theme.token.colorBgContainer : undefined} />
+
+-------------

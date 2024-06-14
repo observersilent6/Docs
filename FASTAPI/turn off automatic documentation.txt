@@ -1,0 +1,4 @@
+
+# FASTAPI Instance
+# app = FastAPI()
+app = FastAPI(openapi_url=None)

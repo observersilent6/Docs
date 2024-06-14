@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/1364173/stopping-python-using-ctrlc

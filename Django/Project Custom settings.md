@@ -11,7 +11,6 @@
 
 STATIC_ROOT= BASE_DIR / 'static'
 STATICFILES_DIRS=[
-
 ]
 
 
@@ -29,7 +28,7 @@ STATICFILES_DIRS=[
 
 'DIRS': [
             BASE_DIR / 'master_app/templates/master_app',
-        ],
+    ],
 
 ```
 

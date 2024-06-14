@@ -10,7 +10,7 @@ https://stackoverflow.com/questions/59823922/change-modal-button-texts-in-ant-de
 
 -   theme configurations
 
-        -   Create a file `/app/themethemeConfig`
+        -   Create a file `/app/theme/themethemeConfig`
 
 ```
 import type { ThemeConfig } from 'antd';

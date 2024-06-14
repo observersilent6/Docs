@@ -1,0 +1,11 @@
+from fastapi import FastAPI
+
+# FASTAPI Instance
+app = FastAPI()
+
+
+
+# root directory
+@app.get("/")
+def home():
+    return {"msg":"Welcome to the Attack-Defense-Quaestionaries " }

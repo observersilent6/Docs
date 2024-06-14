@@ -1,0 +1,42 @@
+
+class PropertyBase(CoreSchema):
+    name : Optional[str]
+    purpose : Optional[str]
+    is_active : Optional[bool] = False
+    required : Optional[bool] = False
+    value : Optional[str]
+    can_change : Optional[bool] = False
+
+----------------------
+
+
+class PropertyOut(CoreSchema):
+    id : Optional[int]
+    name : Optional[str]
+    purpose : Optional[str]
+    is_active : Optional[bool] = False
+    required : Optional[bool] = False
+    value : Optional[str]
+    can_change : Optional[bool] = False
+    
+
+-----------------
+# Add New Properties to a docker
+@router.post("/{docker_id}/properties/add", summary="Add New Property for a docker" , response_model = PropertyOut, name="dockers:add-docker-property",  status_code=HTTP_200_OK)
+async def add_docker_property(property :PropertyBase, docker_id: int = Path(..., title="The ID of the docker to get", ge=1), db:Session = Depends(get_db)):
+    try:
+        docker = db.query(DockerModel).filter(DockerModel.id == docker_id).first()
+        db_property = PropertyModel(**property.model_dump(), docker_id=docker_id)
+        db.add(db_property)
+        db.commit()
+        db.refresh(db_property)
+        
+        if not docker:
+            raise HTTPException(status_code=404, detail="Docker not found")
+        return db_property
+    except Exception as e:
+        print(e)
+        return JSONResponse(
+            status_code=418,
+            content={"message": f"{settings.INTERNAL_SERVER_ERROR_500_MESSAGE}"},
+        )

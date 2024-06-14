@@ -1,0 +1,5 @@
+https://fastapitutorial.com/blog/fastapi-course/
+
+
+-> Design a user model:
+	https://www.jeffastor.com/blog/designing-a-robust-user-model-in-a-fastapi-app/

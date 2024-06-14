@@ -1,0 +1,48 @@
+-   Install Pip Package
+
+    pip install python-dotenv
+
+
+-   Create .env file at project's root directory
+
+    DATABASE_CONNECTION=sqlite:///./sql_app.db
+
+
+-   Create configuration file at app/config.py
+
+
+# from pydantic import BaseSettings
+
+from pydantic_settings import BaseSettings
+
+# import os
+# from dotenv import load_dotenv
+
+# from pathlib import Path
+# env_path = Path('.') / '.env'
+# load_dotenv(dotenv_path=env_path)
+
+
+class Settings(BaseSettings):
+    DATABASE_URL: str = "sqlite:///./sql_app.db"
+    SERVER_IP: str = "0.0.0.0"
+    SERVER_PORT: str = "8000"
+    PROJECT_NAME: str = "Attack-Defense-Questionaries"
+    PROJECT_VERSION: str = "v1"
+    # SECRET_KEY : str
+    # ACCESS_TOKEN_EXPIRE_SECONDS : int
+    # JWT_ALGORITHM : str
+    # JWT_AUDIENCE : str
+    # JWT_TOKEN_PREFIX : str
+    # REFRESH_TOKEN_EXPIRE_SECONDS : int
+    # JWT_REFRESH_SECRET_KEY : str
+    # debug_mode: bool = False
+    # KUBERCONFIG_PATH : str
+    # UPLOAD_DIRECTORY : str
+    # DOMAIN : str
+    # INTERNAL_SERVER_ERROR_500_MESSAGE : str
+
+    class Config:
+        env_file = ".env"
+
+settings = Settings()
