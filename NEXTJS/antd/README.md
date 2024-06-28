@@ -5,12 +5,12 @@ https://stackoverflow.com/questions/59823922/change-modal-button-texts-in-ant-de
 
 -   Install antdpackage
 
-        npm install antd nextjs-toploader @ant-design/nextjs-registry
+        npm install antd nextjs-toploader @ant-design/nextjs-registry  @ant-design/icons
 
 
 -   theme configurations
 
-        -   Create a file `/app/theme/themethemeConfig`
+        -   Create a file `/app/theme/themeConfig`
 
 ```
 import type { ThemeConfig } from 'antd';

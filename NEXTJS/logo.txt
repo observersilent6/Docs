@@ -1,0 +1,8 @@
+// Logo 
+const LOGO = () => {
+  return (
+    <>
+      <link rel="icon" href="/assets/img/logo_ico.ico" sizes="any" />
+    </>
+  )
+}

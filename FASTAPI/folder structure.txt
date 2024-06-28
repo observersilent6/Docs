@@ -1,38 +1,93 @@
-./app/
-├── ./app/alembic/
-│   ├── ./app/alembic/versions/
-│   │   └── ./app/alembic/versions/migrations.py
-│   ├── ./app/alembic/env.py
-│   ├── ./app/alembic/README
-│   └── ./app/alembic/script.py.mako
-├── ./app/apis/
-│   ├── ./app/apis/v1/
-│   │   ├── ./app/apis/v1/__init__.py
-│   │   └── ./app/apis/v1/router_user.py
-│   ├── ./app/apis/__init__.py
-│   └── ./app/apis/base.py
-├── ./app/core/
-│   ├── ./app/core/__init__.py
-│   ├── ./app/core/config.py
-│   └── ./app/core/hashing.py
-├── ./app/db/
-│   ├── ./app/db/models/
-│   │   ├── ./app/db/models/__init__.py
-│   │   └── ./app/db/models/user.py
-│   ├── ./app/db/repository/
-│   │   ├── ./app/db/repository/__init__.py
-│   │   └── ./app/db/repository/user.py
-│   ├── ./app/db/__init__.py
-│   ├── ./app/db/base_class.py
-│   ├── ./app/db/database.py
-│   └── ./app/db/session.py
-├── ./app/schemas/
-│   ├── ./app/schemas/__init__.py
-│   └── ./app/schemas/user.py
-├── ./app/__init__.py
-├── ./app/.env
-├── ./app/alembic.ini
-├── ./app/main.py
-├── ./app/requirements.txt
-├── ./app/runserver.py
-└── ./app/sql_app.db
+├───app
+│   │   .env
+│   │   alembic.ini
+│   │   commands.txt
+│   │   main.py
+│   │   requirements.txt
+│   │   runserver.py
+│   │   sql_app.db
+│   │   sql_app_backup.db
+│   │
+│   ├───alembic
+│   │   │   env.py
+│   │   │   README
+│   │   │   script.py.mako
+│   │   │
+│   │   ├───versions
+│   │   │   │   c7f6f94da5f2_add_salt_field_to_the_user_table_.py
+│   │   │   │
+│   │   │   └───__pycache__
+│   │   │           c7f6f94da5f2_add_salt_field_to_the_user_table_.cpython-311.pyc
+│   │   │
+│   │   └───__pycache__
+│   │           env.cpython-311.pyc
+│   │
+│   ├───apis
+│   │   │   base.py
+│   │   │   __init__.py
+│   │   │
+│   │   ├───v1
+│   │   │   │   route_attacks.py
+│   │   │   │   __init__.py
+│   │   │   │
+│   │   │   └───__pycache__
+│   │   │           route_attacks.cpython-311.pyc
+│   │   │           __init__.cpython-311.pyc
+│   │   │
+│   │   └───__pycache__
+│   │           base.cpython-311.pyc
+│   │           __init__.cpython-311.pyc
+│   │
+│   ├───core
+│   │   │   config.py
+│   │   │   __init__.py
+│   │   │
+│   │   └───__pycache__
+│   │           config.cpython-311.pyc
+│   │           __init__.cpython-311.pyc
+│   │
+│   ├───db
+│   │   │   base.py
+│   │   │   base_class.py
+│   │   │   database.py
+│   │   │   session.py
+│   │   │   __init__.py
+│   │   │
+│   │   ├───models
+│   │   │   │   attacks.py
+│   │   │   │   __init__.py
+│   │   │   │
+│   │   │   └───__pycache__
+│   │   │           attacks.cpython-311.pyc
+│   │   │           __init__.cpython-311.pyc
+│   │   │
+│   │   ├───repository
+│   │   │   │   attacks.py
+│   │   │   │   __init__.py
+│   │   │   │
+│   │   │   └───__pycache__
+│   │   │           attacks.cpython-311.pyc
+│   │   │           __init__.cpython-311.pyc
+│   │   │
+│   │   └───__pycache__
+│   │           base.cpython-311.pyc
+│   │           base_class.cpython-311.pyc
+│   │           session.cpython-311.pyc
+│   │           __init__.cpython-311.pyc
+│   │
+│   ├───dependencies
+│   │       __init__.py
+│   │
+│   ├───schemas
+│   │   │   attacks.py
+│   │   │   __init__.py
+│   │   │
+│   │   └───__pycache__
+│   │           attacks.cpython-311.pyc
+│   │           __init__.cpython-311.pyc
+│   │
+│   ├───services
+│   │       __init__.py
+│   │
+│   └───__pycache__
+│           main.cpython-311.pyc

@@ -1,0 +1,11 @@
+https://stackoverflow.com/questions/31463025/why-does-git-merge-a-branch-into-itself
+
+
+
+
+
+
+You can do this two ways (when getting the changes from the remote server):
+
+git fetch; git rebase
+git pull --rebase

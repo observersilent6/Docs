@@ -1,3 +1,6 @@
+npm i aos
+
+
 "use client";
 
 import AOS from 'aos';

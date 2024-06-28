@@ -1,0 +1,2 @@
+alembic revision --autogenerate -m "Add Salt field to the user table migrations"  #analyzes tables and creates a migration file
+alembic upgrade head  #executes the migration files to make actual changes in db
