@@ -1,0 +1,1 @@
+npm i aos  nextjs-toploader react-hot-toast react-loader-spinner react-icons antd nextjs-toploader @ant-design/nextjs-registry  @ant-design/icons
