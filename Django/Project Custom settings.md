@@ -18,6 +18,19 @@ STATICFILES_DIRS=[
 
 ```
 
+
+## Media Configs
+
+
+-   Update `project/settings.py`
+
+
+```
+MEDIA_URL = '/media/'
+MEDIA_ROOT= BASE_DIR.parent / 'media'
+
+```
+
 ## Template configs
 
 
@@ -33,17 +46,6 @@ STATICFILES_DIRS=[
 ```
 
 
-## Media Configs
-
-
--   Update `project/settings.py`
-
-
-```
-MEDIA_URL = '/media/'
-MEDIA_ROOT= BASE_DIR.parent / 'media'
-
-```
 ## Update projects urls (static, media)
 
 

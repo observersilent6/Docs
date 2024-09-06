@@ -1,10 +1,22 @@
 #   PostgreSQL - Installation and Configurations (On Ubuntu )
 
 
+
+#### Postgres reset password : 
+
+Ref : https://www.postgresqltutorial.com/postgresql-administration/postgresql-reset-password/
+
+----------------------------
+
+#### Start How to start psql.exe on windows:
+
+Ref : https://stackoverflow.com/questions/47606648/how-to-start-psql-exe
+
+---------------------
+
 Ref : https://www.cherryservers.com/blog/how-to-install-and-setup-postgresql-server-on-ubuntu-20-04#step-2-install-postgresql
 
     sudo apt update
-
 
     sudo apt install postgresql postgresql-contrib
 
@@ -37,15 +49,15 @@ Ref : https://www.cherryservers.com/blog/how-to-install-and-setup-postgresql-ser
 
 -   Create New Database :
     
-        CREATE DATABASE test_db;
+        CREATE DATABASE blueteams;
 
 -   Grant Privileges to User on a specific Database:
 
-        GRANT ALL PRIVILEGES ON DATABASE test_db TO jhon;
+        GRANT ALL PRIVILEGES ON DATABASE blueteams TO jhon;
 
 -   Change Ownership for a Databse:
     
-        ALTER DATABASE test_db OWNER TO jhon;
+        ALTER DATABASE blueteams OWNER TO jhon;
 
 
 -   Create A New Table to a Database:
@@ -125,3 +137,15 @@ Ref : https://www.cherryservers.com/blog/how-to-install-and-setup-postgresql-ser
 -   Exit PostgreSQL Prompt:
 
         \q
+
+
+- prisma connector
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+postgresql://jhon:123456789@localhost:5432/blueteams
+
